@@ -24,4 +24,4 @@ The code
 
 - _synthetic.py_
 
-shows how to use GLoG to create the entropy diagram of the signal to assist in the visual analysis of the spatio-temporal data.
+shows how to use GLoG to create the entropy diagram of the signal.
