@@ -24,8 +24,6 @@ def Gauss(t,a,m,sigma):
     return(g)
 
 def check_data_type(dt):
-    #print(type(dt))
-    #print(sparse.lil.lil_matrix)
     try:
         if type(dt) is not np.ndarray:
             if type(dt) is not sparse.lil.lil_matrix:
@@ -57,7 +55,7 @@ class g_log():
         self.adj = Adj
 
 #######
-    def edge_detection(self, Xdata, sigma = 2.0, stdp = 0.0, binary = False, cheby_degree = 6):
+    def edge_detection(self, Xdata, sigma=2.0, stdp=0.0, binary=False, cheby_degree=6):
         check_data_type(Xdata)
 
         try:
@@ -68,9 +66,7 @@ class g_log():
             print("Graph dot defined... see G_LoG.set_graph()")
             sys.exit()
 
-        log = self.LoG(Xdata, sigma = sigma, cheby_degree = cheby_degree)
-        #log[np.where(log < 0.0)] = -1.0
-        #log[np.where(log > 0.0)] = 1.0
+        log = self.LoG(Xdata, sigma=sigma, cheby_degree=cheby_degree)
 
         # getting graph edges
         A = self.adj
@@ -255,7 +251,6 @@ if __name__ == "__main__":
     el = [[i,i+1] for j in range(0,n) for i in range(n*j,n*(j+1)-1)]
     el.extend([[i,i+n] for j in range(0,n-1) for i in range(n*j,n*(j+1))])
 
-
     # adjacent matrix
     A = sparse.lil.lil_matrix((n*n,n*n))
     for e in el:
@@ -292,13 +287,13 @@ if __name__ == "__main__":
     ax1 = plt.subplot(1,2,1)
     ax1.set_facecolor("black")
     ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fspk,cmap=plt.cm.inferno)
+    plt.scatter(X[:,0],X[:,1],c=fspk[:,0],cmap=plt.cm.inferno)
     plt.title('Smoothing spikes')
 
     ax12 = plt.subplot(1,2,2)
     ax12.set_facecolor("black")
     ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fspk_smoothed,cmap=plt.cm.inferno)
+    plt.scatter(X[:,0],X[:,1],c=fspk_smoothed[:,0],cmap=plt.cm.inferno)
 
     plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
     cax = plt.axes([0.85, 0.1, 0.05, 0.8])
@@ -309,19 +304,20 @@ if __name__ == "__main__":
     #######################################
 
     ######### Edge Detection ##########
-    edges = my_glog.edge_detection(fs,sigma=3,stdp=3.0)
+    edges_ic = my_glog.edge_detection(fs,sigma=3,stdp=3.0,binary=True)
+    sedges = edges_ic[1];
 
     fig2 = plt.figure(2)
     ax2 = fig2.add_subplot(1,2,1)
     ax2.set_facecolor("black")
     ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fs,cmap=plt.cm.inferno)
+    plt.scatter(X[:,0],X[:,1],c=fs[:,0],cmap=plt.cm.inferno)
     plt.title('Edge Detection')
 
     ax22 = plt.subplot(1,2,2)
     ax22.set_facecolor("black")
     ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=edges,cmap=plt.cm.inferno)
+    plt.scatter(X[:,0],X[:,1],c=sedges[:,0],cmap=plt.cm.inferno)
 
     plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
     cax = plt.axes([0.85, 0.1, 0.05, 0.8])
