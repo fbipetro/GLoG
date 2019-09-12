@@ -83,10 +83,9 @@ class tegrasa():
         edges = glog.g_log(Adj = self.adj)
 
         ###### Synthetic Circle #######
-        edges_ic = edges.edge_detection(self.signal,sigma=1.2,stdp=3.0,binary=True)
+        edges_ic = edges.edge_detection(self.signal,sigma=1.3,stdp=3.0,binary=True)
         self.edges = edges_ic[1];
         if (self.binary == False):
-            #self.sge = np.abs(edges.smooth(self.sge,smooth_type='GAUSS',sigma = 2.0, normalize = True))
             self.sge = edges.smooth(self.edges,smooth_type='GAUSS',sigma = 2.0, normalize = True)
             self.sge[np.where(self.sge < 0.0)] = 0.0
         else:
@@ -138,7 +137,7 @@ class tegrasa():
     def run(self):
         self.smoothed_graph_edges()
         self.edge_entropy()
-        self.edge_clusters(k=4)
+        self.edge_clusters(k=3)
 
 
     def get_edges(self,k):
