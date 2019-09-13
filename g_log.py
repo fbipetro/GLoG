@@ -189,7 +189,6 @@ class g_log():
                 print("Smooth Function "+smooth_type+" not known !!")
                 sys.exit()
 
-
         a = lmax[0]/2.0
         c = np.zeros((cheby_degree,))
         for m in range(cheby_degree):
@@ -228,7 +227,6 @@ class g_log():
         D = sparse.lil_matrix(np.diag(np.ravel(np.sum(A,axis=0))))
         L = D - A
         lmax = sparse.linalg.eigsh(L,k=1)[0]
-        print(lmax)
         self.lmax = lmax
 
         a = lmax[0]/2.0
@@ -239,88 +237,3 @@ class g_log():
         log = self.cheby_approx(Xdata,L,c,a,cheby_degree).toarray()
 
         return(log)
-
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    import networkx as ntx
-
-    n=30
-
-    # creating edges
-    el = [[i,i+1] for j in range(0,n) for i in range(n*j,n*(j+1)-1)]
-    el.extend([[i,i+n] for j in range(0,n-1) for i in range(n*j,n*(j+1))])
-
-    # adjacent matrix
-    A = sparse.lil.lil_matrix((n*n,n*n))
-    for e in el:
-        A[e[0],e[1]] = 1
-        A[e[1],e[0]] = 1
-
-    #A = A.toarray()
-    # creating a step function
-    fs = np.ones((n*n,1))
-    fs[n*n//2:,0] = -1.0
-    fs = fs + np.random.uniform(low=-0.3, high=0.3, size=(n*n,1))
-
-    # creating a spike function
-    nodes = np.random.randint(low = 0, high = n*n-1, size=5)
-    fspk = np.zeros((n*n,1))
-    fspk[nodes] = 1.0
-
-    # for rendering purpose only
-    X = np.asarray([[i,j] for j in range(0,n) for i in range(0,n)],dtype = float)
-    X[:,0] = X[:,0]/n
-    X[:,1] = X[:,1]/n
-    G = ntx.from_numpy_matrix(A.toarray())
-
-
-    my_glog = g_log(Adj = A)
-    #######################################
-    ######   Smoothing the Spike   ########
-    #######################################
-
-    ###### smoothing a spike with smooth_cheby ########
-    fspk_smoothed = my_glog.smooth(fspk, smooth_type = 'ARMA', plambda = 5)
-
-    fig1 = plt.figure(1)
-    ax1 = plt.subplot(1,2,1)
-    ax1.set_facecolor("black")
-    ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fspk[:,0],cmap=plt.cm.inferno)
-    plt.title('Smoothing spikes')
-
-    ax12 = plt.subplot(1,2,2)
-    ax12.set_facecolor("black")
-    ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fspk_smoothed[:,0],cmap=plt.cm.inferno)
-
-    plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
-    cax = plt.axes([0.85, 0.1, 0.05, 0.8])
-    plt.colorbar(cax=cax)
-
-    #######################################
-    ######        G_LoG Step         ######
-    #######################################
-
-    ######### Edge Detection ##########
-    edges_ic = my_glog.edge_detection(fs,sigma=3,stdp=3.0,binary=True)
-    sedges = edges_ic[1];
-
-    fig2 = plt.figure(2)
-    ax2 = fig2.add_subplot(1,2,1)
-    ax2.set_facecolor("black")
-    ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=fs[:,0],cmap=plt.cm.inferno)
-    plt.title('Edge Detection')
-
-    ax22 = plt.subplot(1,2,2)
-    ax22.set_facecolor("black")
-    ntx.draw_networkx_edges(G, pos=X, edge_color='dimgray',alpha=0.5)
-    plt.scatter(X[:,0],X[:,1],c=sedges[:,0],cmap=plt.cm.inferno)
-
-    plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
-    cax = plt.axes([0.85, 0.1, 0.05, 0.8])
-    plt.colorbar(cax=cax)
-    
-    plt.show()
