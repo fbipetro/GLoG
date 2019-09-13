@@ -43,7 +43,7 @@ for i in range(m):
      truncated[np.where(truncated == nbins)] = nbins-1
      pis = pdfs[rows.ravel(),truncated.ravel()]
      entro[i] = -np.sum(pis*np.log(pis))/n
-
+     
 ###################################
 # cluster edge nodes configurations
 ###################################
