@@ -33,7 +33,7 @@ __circel.xy__: N x 2 position matrix where N is the number of nodes.
 
 __circle.dat__: N x k signal matrix where where N is the number of nodes and k is the number of time slices.
 
-The codes
+The code
 
 - _temporal.py_
 
