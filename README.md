@@ -1,10 +1,14 @@
 # GLoG
 
-The Graph Laplacian of Gaussian (GLoG) is a method to visual analysis of spatio-temporal data. 
+The Graph Laplacian of Gaussian (GLoG) is a filter defined for graph signals.
 
-This method proposes a novel filter, called GLoG, which is the counterpart for graphs of the so-called Laplacian of Gaussian edge detection method widely used in image processing. The proposed GLoG filter can identify spatial locations of abrupt changes in a signal, uncovering regions (boundaries) where the signal changes its properties. Moreove, we rely on the GLoG filter to define the concept of entropy of time slices, from which we derive a temporal entropy diagram. The latter allows the visual identification of time instances where observed boundaries are likely to happen (lower entropy time instants) as well as moments where observed boundaries are less expected (higher entropy time instants). The resulting analysis makes easier the visual identification of expected and unexpected patterns over time.
+The proposed GLoG filter can be used to:
 
-The provided ``class GLoG`` code implements the GLoG method described in the work:
+1. identify spatial locations of abrupt changes in a graph signal, uncovering regions (more precisely edges) where the signal changes its properties. See Example 1.
+
+2. define the concept of entropy of time slices for a time-varying data, of which a temporal entropy diagram is defined. The entropy diagram can be use to visual identification of time instances where observed boundaries are likely to happen (lower entropy time instants) as well as moments where observed boundaries are less expected (higher entropy time instants). See Example 2.
+
+The provided ``class GLoG`` code implements the GLoG filter described in the work:
 
 L.G. Nonato, F. Petronetto, C.T. Silva. GLoG: Laplacian of Gaussian for Spatial Pattern Detection in Spatio-Temporal Data (https://arxiv.org/abs/1909.03993).
 
@@ -15,9 +19,9 @@ Example 1: <br>
 
 The code
 
-- _g_log.py_
+- _static.py_
 
-show how to use GLoG to define edge nodes configuration of the static signal. 
+show how to use GLoG filter to define edge nodes configuration of a static signal. 
 
 ---
 Example 2: <br>
@@ -31,8 +35,6 @@ __circle.dat__: N x k signal matrix where where N is the number of nodes and k i
 
 The codes
 
-- _synthetic.py_ (run)
-- _g_log.py_
-- _tegrasa.py_
+- _temporal.py_
 
-show how to use GLoG to create the entropy diagram of the signal. 
+show how to use GLoG filter to create the entropy diagram of the time-varying signal. 
